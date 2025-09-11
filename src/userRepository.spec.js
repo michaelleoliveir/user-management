@@ -69,8 +69,28 @@ describe('User Repository', () => {
 
     // updating users data
     describe('updateUser', () => {
-        test.todo('Deve atualizar um usuário existente')
-        test.todo('Deve retornar uma exceção para um usuário não existente')
+        test('Deve atualizar um usuário existente', async () => {
+            const user = await userRepository.insertUser({
+                name: 'Michaelle Oliveira',
+                email: 'michaelle@teste.com'
+            });
+
+            const result = await userRepository.updateUser(user._id, { name: 'Mika', email: 'teste@teste.com' });
+
+            expect(result).toMatchObject({
+                _id: user._id,
+                name: 'Mika',
+                email: 'teste@teste.com'
+            });
+        });
+
+        test('Deve retornar uma exceção para um usuário não existente', async () => {
+            const fakeId = new ObjectId().toString();
+
+            await expect(
+                userRepository.updateUser(fakeId, { name: 'Qualquer', email: 'teste@teste.com' })
+            ).rejects.toThrow(`User with id ${fakeId} does not exist`);
+        })
     });
 
     // removing user
@@ -94,7 +114,30 @@ describe('User Repository', () => {
     });
 
     describe('findAll', () => {
-        test.todo('Deve retornar uma lista vazia de usuários');
-        test.todo('Deve retornar uma lista contendo dois usuários');
+        test('Deve retornar uma lista de usuários', async () => {
+            await userRepository.insertUser({
+                name: 'Lara Raj',
+                email: 'lararaj@katseye.com'
+            });
+
+            await userRepository.insertUser({
+                name: 'Daniella',
+                email: 'daniella@katseye.com'
+            });
+
+            const users = await userRepository.findAllUsers();
+
+            expect(users).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ name: 'Lara Raj', email: 'lararaj@katseye.com' }),
+                    expect.objectContaining({ name: 'Daniella', email: 'daniella@katseye.com' })
+                ])
+            );
+        });
+
+        test('Deve retornar uma exceção para listagem não existente', async () => {
+            await expect(userRepository.findAllUsers())
+                .rejects.toThrow('Empty list')
+        });
     })
 })
