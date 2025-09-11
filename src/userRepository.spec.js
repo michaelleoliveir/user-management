@@ -53,6 +53,37 @@ describe('User Repository', () => {
         })
     });
 
+    // return user by their id
+    describe('findOneById', () => {
+        test('Deve retornar um usuário existente pelo id', async () => {
+
+            // inser user into database
+            const resultInsert = await collection.insertOne({
+                name: 'John Doe',
+                email: 'johndoe@gmail.com'
+            });
+
+            const userId = resultInsert.insertedId;
+
+            const user = await userRepository.findOneById(userId);
+
+            expect(user).toStrictEqual({
+                _id: userId,
+                name: 'John Doe',
+                email: 'johndoe@gmail.com'
+            });
+            
+        });
+
+        test('Deve retornar uma exceção para um usuário não existente', async () => {
+            const fakeId = new ObjectId().toString();
+
+            await expect(
+                userRepository.findOneById(fakeId)
+            ).rejects.toThrow(`User with id ${fakeId} does not exist`);
+        })
+    });
+
     // insert user into the database
     describe('insertUser', () => {
         test('Deve inserir um novo usuário', async () => {

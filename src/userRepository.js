@@ -26,6 +26,16 @@ class UserRepository {
         return user;
     };
 
+    async findOneById(id) {
+        const user = await this.collection.findOne({ _id: new ObjectId(id) });
+
+        if (user === null) {
+            throw new Error(`User with id ${id} does not exist`);
+        }
+
+        return user;
+    };
+
     async insertUser(user) {
         await this.collection.insertOne(user);
         return user;
