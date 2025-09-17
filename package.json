@@ -4,6 +4,7 @@
   "description": "A user management system to register, update, and delete users.",
   "main": "index.js",
   "scripts": {
+    "start": "node src/server.js",
     "test": "jest --runInBand --detectOpenHandles"
   },
   "author": "Michaelle Oliveira",
