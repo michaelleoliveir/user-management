@@ -107,7 +107,10 @@ describe('UserAPI', () => {
                     })
                 )
             });
-            test.todo('Deve retornar status code 404 para usuário não existente');
+            test('Deve retornar status code 404 para usuário não existente', async () => {
+                const response = await request(app).get('/users/1234567890abcdef1234567z');
+                expect(response.statusCode).toBe(404);
+            });
         });
 
         describe('PUT /', () => {

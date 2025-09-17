@@ -37,8 +37,11 @@ class UserRepository {
     };
 
     async insertUser(user) {
-        await this.collection.insertOne(user);
-        return user;
+        const result = await this.collection.insertOne(user);
+        return {
+            _id: result.insertedId,
+            ...user
+        };
     };
 
     async deleteUser(id) {

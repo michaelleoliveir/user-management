@@ -35,14 +35,18 @@ app.get('/users', async (request, response) => {
         const users = await userRepository.findAllUsers();
         response.status(200).json(users);
     } catch (error) {
-        if(error.message === 'Empty list') 
+        if (error.message === 'Empty list')
             return response.status(200).json([])
     }
 });
 
 app.get('/users/:id', async (request, response) => {
-    const user = await userRepository.findOneById(new ObjectId(request.params.id));
-    response.json(user);
+    try {
+        const user = await userRepository.findOneById(new ObjectId(request.params.id));
+        response.json(user);
+    } catch (error) {
+        response.status(404).send()
+    }
 });
 
 app.post('/users', async (request, response) => {
