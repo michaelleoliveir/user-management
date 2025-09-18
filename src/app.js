@@ -2,6 +2,7 @@ const express = require('express');
 const { ObjectId } = require('mongodb');
 const { connectDB } = require('./db');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const dotenv = require("dotenv");
 
 const app = express();
