@@ -9,6 +9,10 @@ const app = express();
 dotenv.config();
 
 app.use(bodyParser.json());
+app.use(cors({
+    allowedHeaders: ['X-Total-Count', 'Content-type'],
+    exposedHeaders: ['X-Total-Count', 'Content-type'],
+}));
 
 let userRepository;
 
