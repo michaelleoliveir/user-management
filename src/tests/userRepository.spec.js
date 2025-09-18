@@ -1,4 +1,4 @@
-const UserRepository = require('./userRepository');
+const UserRepository = require('../userRepository');
 
 const { MongoClient, ObjectId } = require("mongodb");
 const dotenv = require("dotenv");

@@ -1,7 +1,7 @@
 const request = require('supertest');
-const app = require('./app');
-const UserRepository = require('./userRepository');
-const { MongoClient, ObjectId } = require("mongodb");
+const app = require('../app');
+const { connectDB, closeDB } = require('../db');
+const { ObjectId } = require("mongodb");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -10,20 +10,15 @@ describe('UserAPI', () => {
 
     let userRepository;
     let collection;
-    let client;
 
     beforeAll(async () => {
-        let uri = process.env.MONGO_URI;
-        client = new MongoClient(uri);
-        await client.connect(); // connecting with database
-
-        collection = client.db('users_db').collection('users');
-
-        userRepository = new UserRepository(collection);
+        const db = await connectDB();
+        collection = db.collection;
+        userRepository = db.userRepository;
     });
 
     afterAll(async () => {
-        await client.close();
+        await closeDB();
     });
 
     beforeEach(async () => {
