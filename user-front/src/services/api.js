@@ -7,9 +7,9 @@ const api = axios.create({
     }
 });
 
-export const createUser = (data) => axios.post('/users/', data);
-export const removeUser = (id) => axios.delete(`/users/${id}`);
-export const updateUser = (data, id) => axios.put(`/users/${id}`, data);
-export const getUsers = () => axios.get('/users/');
+export const createUser = (data) => api.post('/users', data);
+export const removeUser = (id) => api.delete(`/users/${id}`);
+export const updateUser = (data, id) => api.put(`/users/${id}`, data);
+export const getUsers = () => api.get('/users');
 
 export default api;

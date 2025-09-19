@@ -28,7 +28,12 @@ app.use(async (req, res, next) => {
 app.get('/users', async (request, response) => {
     try {
         const users = await userRepository.findAllUsers();
-        response.status(200).json(users);
+        const formatted = users.map((user) => ({
+            id: user._id.toString(),
+            name: user.name,
+            email: user.email
+        }))
+        response.status(200).json(formatted);
     } catch (error) {
         if (error.message === 'Empty list')
             return response.status(400).json([])
