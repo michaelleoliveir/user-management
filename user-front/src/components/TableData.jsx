@@ -3,30 +3,26 @@ import {
     TableBody,
     TableCaption,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { getUsers } from "@/services/api";
-import { useEffect, useState } from "react"
+import { removeUser } from "@/services/api";
 import { Button } from "./ui/button";
+import DialogEdit from "./DialogEdit";
 
-const TableData = () => {
-    const [userData, setUserData] = useState([]);
+const TableData = ({ userData, setUserData, getData }) => {
 
-    const getData = async () => {
-        let res = await getUsers();
-        setUserData(res.data);
+    const handleRemove = async (id) => {
+        try {
+            await removeUser(id);
+            setUserData((prev) => prev.filter((user) => user.id !== id))
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
-        console.log(res.data);
-    };
-
-    useEffect(() => {
-        getData();
-    }, []);
-
-    if(userData.length === 0) {
+    if (userData.length === 0) {
         return <p>Nenhum usuário encontrado</p>
     }
 
@@ -47,8 +43,8 @@ const TableData = () => {
                         <TableCell>{user.name}</TableCell>
                         <TableCell>{user.email}</TableCell>
                         <TableCell className="flex justify-end">
-                            <Button variant={'default'} className="mr-3 cursor-pointer">Editar</Button>
-                            <Button variant={'destructive'} className="cursor-pointer">Excluir</Button>
+                            <DialogEdit user={user} getData={getData} />
+                            <Button onClick={() => handleRemove(user.id)} variant={'destructive'} className="cursor-pointer">Excluir</Button>
                         </TableCell>
                     </TableRow>
                 ))}
