@@ -4,26 +4,41 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { createUser } from "@/services/api"
+import { useValidateEmail } from "@/hooks/useValidateEmail"
+import { TriangleAlert } from "lucide-react"
 
 const DialogButton = ({ getData }) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [open, setOpen] = useState(false);
+    const [apiError, setApiError] = useState("");
+
+    const { error, validateEmail } = useValidateEmail();
 
     const handleCreate = async (e) => {
         e.preventDefault();
 
+        if (!name.trim() || !email.trim()) {
+            setApiError('You must enter a name and email');
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            return;
+        }
+
         try {
             await createUser({ name, email });
 
-            setOpen(false);
-
+            setApiError("");
             setName("");
             setEmail("");
 
+            setOpen(false);
+
             getData?.();
         } catch (error) {
-            console.log(error)
+            setApiError('Try again later')
         }
     }
 
@@ -52,6 +67,14 @@ const DialogButton = ({ getData }) => {
                             <Input id="email" name="email" value={email} onChange={((e) => setEmail(e.target.value))} autoComplete="off" />
                         </div>
                     </div>
+
+                    {(error || apiError) && (
+                        <div className="flex text-red-500 mt-3 bg-red-50 p-2 px-3 rounded-3xl">
+                            <TriangleAlert />
+                            <p className="text-sm ml-2">{error || apiError}</p>
+                        </div>
+                    )}
+
                     <DialogFooter className="mt-5">
                         <DialogClose asChild>
                             <Button variant="outline">Cancel</Button>
