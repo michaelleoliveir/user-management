@@ -38,7 +38,7 @@ const DialogEdit = ({ user, getData }) => {
             <Dialog open={open} onOpenChange={setOpen}>
 
                 <DialogTrigger asChild>
-                    <Button variant={'default'} className="mr-3 cursor-pointer">Editar</Button>
+                    <Button data-cy="user-card" variant={'default'} className="mr-3 cursor-pointer">Editar</Button>
                 </DialogTrigger>
 
                 <DialogContent className="sm:max-w-[425px]">
