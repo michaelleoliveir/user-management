@@ -4,6 +4,7 @@
   "description": "A user management system to register, update, and delete users.",
   "main": "index.js",
   "scripts": {
+    "clear:db": "node src/clearDatabase.js",
     "start": "node src/server.js",
     "test": "jest --runInBand --detectOpenHandles"
   },
