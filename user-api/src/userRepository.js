@@ -52,6 +52,11 @@ class UserRepository {
         }
     };
 
+    async deleteAll() {
+        const result = await this.collection.deleteMany({});
+        return result;
+    }
+
     async updateUser(id, data) {
         const result = await this.collection.updateOne({ _id: new ObjectId(id) }, { $set: data });
 

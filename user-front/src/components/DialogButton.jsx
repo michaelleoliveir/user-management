@@ -38,7 +38,13 @@ const DialogButton = ({ getData }) => {
 
             getData?.();
         } catch (error) {
-            setApiError('Try again later')
+            if (error.response && error.response.data) {
+                // pega a mensagem vinda do backend
+                setApiError(error.response.data.message);
+            } else {
+                // fallback genérico
+                setApiError(error.message);
+            }
         }
     }
 

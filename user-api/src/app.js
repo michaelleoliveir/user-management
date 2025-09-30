@@ -61,7 +61,7 @@ app.post('/users', async (request, response) => {
     } catch (error) {
         if (error.code === 11000) {
             return response.status(400).send({
-                message: 'Invalid email',
+                message: 'Try using another email',
                 code: 400
             });
         }

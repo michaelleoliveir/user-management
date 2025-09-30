@@ -1,19 +1,27 @@
-const { MongoClient } = require('mongodb');
-const dotenv = require("dotenv");
+require('dotenv').config();
 const { connectDB, closeDB } = require('./db');
-
-dotenv.config();
 
 (async () => {
     try {
-        const {userRepository} = await connectDB();
+        console.log('Conectando ao banco...');
 
-        await userRepository.deleteAll();
+        const dbHandle = await connectDB();
+        const userRepository = dbHandle.userRepository || dbHandle;
 
-        console.log('Database cleared');
+        if (!userRepository) throw new Error('userRepository não encontrado!');
+        if (typeof userRepository.deleteAll !== 'function') throw new Error('deleteAll não é uma função');
+
+        console.log('Chamando deleteAll()...');
+        const result = await userRepository.deleteAll();
+        console.log('Resultado do deleteAll:', result);
+        console.log('Database cleared ✅');
+
     } catch (error) {
-        console.log('Error while deleting database: ', error);
+        console.error('Erro ao limpar banco:', error);
     } finally {
-        await closeDB();
+        if (typeof closeDB === 'function') {
+            await closeDB();
+            console.log('Conexão com DB encerrada.');
+        }
     }
-})
+})();

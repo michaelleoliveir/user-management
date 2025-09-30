@@ -1,5 +1,9 @@
 describe("Gestão de usuários", () => {
 
+  beforeEach(() => {
+    cy.exec('npm --prefix ../user-api run clear:db')
+  })
+
   it("Criar um novo usuário", () => {
 
     // abrir formulário de cadastro
