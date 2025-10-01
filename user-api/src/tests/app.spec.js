@@ -1,7 +1,6 @@
 const request = require('supertest');
 const app = require('../app');
 const { connectDB, closeDB } = require('../db');
-const { ObjectId } = require("mongodb");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -97,7 +96,7 @@ describe('UserAPI', () => {
                 expect(user2.statusCode).toBe(400);
                 expect(user2.body).toEqual(
                     expect.objectContaining({
-                        message: 'Invalid email',
+                        message: 'Try using another email',
                         code: 400
                     })
                 )
